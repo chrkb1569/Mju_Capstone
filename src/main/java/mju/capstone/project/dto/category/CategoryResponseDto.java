@@ -11,10 +11,12 @@ import mju.capstone.project.domain.category.Category;
 @Getter
 @Builder
 public class CategoryResponseDto {
+    private Long id;
     private String category;
 
     public CategoryResponseDto toDto(Category category) {
         return CategoryResponseDto.builder()
+                .id(category.getId())
                 .category(category.getCategoryName())
                 .build();
     }
