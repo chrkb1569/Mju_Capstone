@@ -8,16 +8,7 @@ import mju.capstone.project.dto.board.BoardEditRequestDto;
 import mju.capstone.project.response.Response;
 import mju.capstone.project.service.board.BoardService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -35,6 +26,29 @@ public class BoardController {
     @ApiImplicitParam(name = "categoryId", value = "조회할 카테고리의 id", example = "1")
     public Response getBoards(@PathVariable Long categoryId) {
         return Response.success(boardService.findBoards(categoryId));
+    }
+
+    //게시글 전체 조회 - 최신글 16개만 조회
+    @GetMapping("/boards/all")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "최신 게시글 조회", notes = "최근에 작성된 게시글들을 조회하는 로직")
+    public Response getRecentBoards() {
+        return Response.success(boardService.findNewBoards());
+    }
+
+    // 분실물의 이름으로 게시글을 검색하는 로직
+    @GetMapping("/boards/item")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "게시글 검색 - 분실물 이름 기준", notes = "분실물의 이름을 통해서 게시글을 검색하는 로직")
+    public Response searchBoardByItem(@RequestParam("itemName") String itemName) {
+        return Response.success(boardService.searchBoardByItem(itemName));
+    }
+
+    @GetMapping("/boards/title")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "게시글 검색 - 게시글 이름 기준", notes = "게시글의 이름을 통해서 게시글을 검색하는 로직")
+    public Response searchBoardByTitle(@RequestParam("title") String title) {
+        return Response.success(boardService.searchBoardByTitle(title));
     }
 
     // 게시글 단일 조회

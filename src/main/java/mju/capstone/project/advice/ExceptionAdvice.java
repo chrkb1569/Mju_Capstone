@@ -1,6 +1,5 @@
 package mju.capstone.project.advice;
 
-import mju.capstone.project.exception.DummyNotFoundException;
 import mju.capstone.project.exception.board.BoardNotFoundException;
 import mju.capstone.project.exception.board.SerialNumberExistException;
 import mju.capstone.project.exception.board.WriterNotMatchException;
@@ -71,11 +70,5 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response categoryNotFoundException() {
         return Response.failure(404, "입력하신 id에 해당하는 카테고리를 찾지 못하였습니다.");
-    }
-
-    @ExceptionHandler(DummyNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Response dummyNotFoundException() {
-        return Response.failure(404, "해당 더미를 찾을 수 없습니다.");
     }
 }

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 public class BoardDetailedDto {
+    private Long id;
     private String title;
     private String content;
     private String writer;
@@ -29,6 +30,7 @@ public class BoardDetailedDto {
 
     public BoardDetailedDto toDto(Board board) {
         return BoardDetailedDto.builder()
+                .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .writer(board.getWriter())
