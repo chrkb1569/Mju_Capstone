@@ -11,4 +11,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findBoardsByCategory(Category category);
 
     Optional<Board> findBoardBySerialNumber(String serialNumber);
+    List<Board> findBoardsByItemNameContaining(String itemName);
+    List<Board> findBoardsByTitleContaining(String title);
 }
