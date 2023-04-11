@@ -4,11 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mju.capstone.project.domain.board.Board;
 import mju.capstone.project.domain.category.Category;
 import mju.capstone.project.domain.image.Image;
-import mju.capstone.project.dto.board.BoardCreateDto;
-import mju.capstone.project.dto.board.BoardDetailedDto;
-import mju.capstone.project.dto.board.BoardEditRequestDto;
-import mju.capstone.project.dto.board.BoardResponseDto;
-import mju.capstone.project.dto.board.BoardUpdateResultDto;
+import mju.capstone.project.dto.board.*;
 import mju.capstone.project.exception.board.BoardNotFoundException;
 import mju.capstone.project.exception.board.SerialNumberExistException;
 import mju.capstone.project.exception.board.WriterNotMatchException;
@@ -44,6 +40,42 @@ public class BoardService {
 
         return findList.stream()
                 .map(board -> new BoardResponseDto().toDto(board))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardAndImageResponseDto> findNewBoards() {
+
+        List<BoardAndImageResponseDto> recentBoards = boardRepository.findAll()
+                .stream().map(value -> new BoardAndImageResponseDto().toDto(value))
+                .collect(Collectors.toList());
+
+        int size = recentBoards.size();
+
+        if(size <= 16) return recentBoards;
+
+        for(int i = 0; i < size - 16; i++) {
+            recentBoards.remove(0);
+        }
+
+        return recentBoards;
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardAndImageResponseDto> searchBoardByItem(String itemName) {
+        List<Board> boardList = boardRepository.findBoardsByItemNameContaining(itemName);
+        if(boardList.isEmpty()) throw new BoardNotFoundException();
+        return boardList.stream()
+                .map(value -> new BoardAndImageResponseDto().toDto(value))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardAndImageResponseDto> searchBoardByTitle(String title) {
+        List<Board> boardList = boardRepository.findBoardsByTitleContaining(title);
+        if(boardList.isEmpty()) throw new BoardNotFoundException();
+        return boardList.stream()
+                .map(value -> new BoardAndImageResponseDto().toDto(value))
                 .collect(Collectors.toList());
     }
 
@@ -84,13 +116,14 @@ public class BoardService {
         saveImage(createDto.getFiles(), images);
     }
 
+    //QR코드 생성
     @Transactional
     public String getQRCode(String serialNumber) {
         if(!serialNumber.startsWith("LOST")) throw new SerialNumberExistException();
 
         boardRepository.findBoardBySerialNumber(serialNumber).orElseThrow(BoardNotFoundException::new);
 
-        return "http://chart.apis.google.com/chart?cht=qr&chl=http://localhost:8080/api/board/serial/"
+        return "http://chart.apis.google.com/chart?cht=qr&chl=http://13.209.24.112:8080/api/board/serial/"
                 + serialNumber + "&chld=H|2&chs=144";
     }
 
