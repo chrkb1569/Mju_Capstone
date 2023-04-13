@@ -9,7 +9,6 @@ import mju.capstone.project.domain.board.Board;
 import mju.capstone.project.exception.image.NotSupportedExtensionException;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +39,9 @@ public class Image {
     @Column(nullable = false)
     private String storedName;
 
+    @Column(nullable = false)
+    private String accessUrl;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "board_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -48,6 +50,11 @@ public class Image {
     public Image(String originName) {
         this.originName = originName;
         this.storedName = getStoredName(originName);
+        this.accessUrl = "";
+    }
+
+    public void setAccessUrl(String accessUrl) {
+        this.accessUrl = accessUrl;
     }
 
     private final static String supportedExtensions[] = {"jpeg", "jpg", "gif", "bmp", "png"};

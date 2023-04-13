@@ -1,38 +1,39 @@
 package mju.capstone.project.service.image;
 
-import mju.capstone.project.exception.image.ImageUploadFailureException;
-import org.springframework.beans.factory.annotation.Value;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
 
 @Service
+@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
-    @Value("${file.dir}")
-    private String location;
+    private final String bucketName = "chrkb1569";
 
-    @PostConstruct
-    public void initFileService() {
-        File file = new File(location);
-
-        if(!file.exists()) file.mkdir();
-    }
+    private final AmazonS3Client amazonS3Client;
 
     @Override
-    public void saveImage(MultipartFile multipartFile, String filename) {
+    public String saveImage(MultipartFile multipartFile, String filename) {
         try {
-            multipartFile.transferTo(new File(location + filename));
-        } catch(IOException e) {
-            throw new ImageUploadFailureException(e.getCause());
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(multipartFile.getContentType());
+            metadata.setContentLength(multipartFile.getInputStream().available());
+
+            amazonS3Client.putObject(bucketName, filename, multipartFile.getInputStream(), metadata);
+
+            return amazonS3Client.getUrl(bucketName, filename).toString();
+        } catch (IOException e) {
+
         }
+        return "";
     }
 
     @Override
     public void deleteImage(String filename) {
-        new File(location + filename).delete();
+        amazonS3Client.deleteObject(bucketName, filename);
     }
 }
