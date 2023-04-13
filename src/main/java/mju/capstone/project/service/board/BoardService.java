@@ -165,7 +165,11 @@ public class BoardService {
 
     public void saveImage(List<MultipartFile> files, List<Image> images) {
         IntStream.range(0, files.size())
-                .forEach(image -> fileService.saveImage(files.get(image), images.get(image).getStoredName()));
+                .forEach(image -> {
+                    Image imageValue = images.get(image);
+                    String url = fileService.saveImage(files.get(image), imageValue.getStoredName());
+                    imageValue.setAccessUrl(url);
+                });
     }
 
     public void deleteImage(List<Image> images) {

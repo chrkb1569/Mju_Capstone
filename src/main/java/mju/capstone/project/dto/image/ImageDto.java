@@ -12,7 +12,9 @@ public class ImageDto {
     private String originalName;
     private String storedName;
 
+    private String accessUrl;
+
     public ImageDto toDto(Image image) {
-        return new ImageDto(image.getOriginName(), image.getStoredName());
+        return new ImageDto(image.getOriginName(), image.getStoredName(), image.getAccessUrl());
     }
 }
