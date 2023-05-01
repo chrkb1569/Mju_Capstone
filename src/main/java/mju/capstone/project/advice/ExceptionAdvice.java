@@ -8,6 +8,10 @@ import mju.capstone.project.exception.category.CategoryNotFoundException;
 import mju.capstone.project.exception.comment.CommentNotFoundException;
 import mju.capstone.project.exception.image.ImageUploadFailureException;
 import mju.capstone.project.exception.image.NotSupportedExtensionException;
+import mju.capstone.project.exception.refreshToken.RefreshTokenNotFoundException;
+import mju.capstone.project.exception.user.LoginFailureException;
+import mju.capstone.project.exception.user.UserDuplicateException;
+import mju.capstone.project.exception.user.UserNotFoundException;
 import mju.capstone.project.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -70,5 +74,29 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response categoryNotFoundException() {
         return Response.failure(404, "입력하신 id에 해당하는 카테고리를 찾지 못하였습니다.");
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response userNotFoundException() {
+        return Response.failure(404, "입력하신 정보와 일치하는 사용자가 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(UserDuplicateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Response userDuplicateException(UserDuplicateException e) {
+        return Response.failure(409, e.getMessage());
+    }
+
+    @ExceptionHandler(LoginFailureException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response loginFailureException() {
+        return Response.failure(400, "로그인에 실패하였습니다. 아이디와 비밀 번호를 다시 한 번 확인해주세요.");
+    }
+
+    @ExceptionHandler(RefreshTokenNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response refreshTokenNotFoundException() {
+        return Response.failure(404, "입력하신 정보와 일치하는 재발급 토큰이 존재하지 않습니다.");
     }
 }
