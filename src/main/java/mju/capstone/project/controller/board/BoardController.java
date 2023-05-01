@@ -44,6 +44,7 @@ public class BoardController {
         return Response.success(boardService.searchBoardByItem(itemName));
     }
 
+    // 게시글 제목을 통한 게시글 조회
     @GetMapping("/boards/title")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "게시글 검색 - 게시글 이름 기준", notes = "게시글의 이름을 통해서 게시글을 검색하는 로직")
@@ -69,6 +70,13 @@ public class BoardController {
         return Response.success(boardService.findBoardBySerialNumber(serialNumber));
     }
 
+    @GetMapping("/board/{id}/{serialNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response checkItem(@PathVariable Long id, @PathVariable String serialNumber) {
+        return Response.success(boardService.checkItem(id, serialNumber));
+    }
+
+    //QR코드 생성
     @GetMapping("/board/QR/{serialNumber}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "QR코드 생성", notes = "제품의 일련 번호를 통하여 QR코드를 생성하는 로직")
