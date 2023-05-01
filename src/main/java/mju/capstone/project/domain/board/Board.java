@@ -1,6 +1,10 @@
 package mju.capstone.project.domain.board;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import mju.capstone.project.domain.base.BaseEntity;
 import mju.capstone.project.domain.category.Category;
 import mju.capstone.project.domain.comment.Comment;
@@ -56,13 +60,22 @@ public class Board extends BaseEntity {
     @Column
     private String serialNumber;
 
+    @Column(nullable = false)
+    private Double latitude;
+
+    @Column(nullable = false)
+    private Double longitude;
+
     @Builder
-    public Board(String title, String content, String writer, String itemName, String serialNumber, Category category, List<Image> images) {
+    public Board(String title, String content, String writer, String itemName,
+                 String serialNumber, Double latitude, Double longitude, Category category, List<Image> images) {
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.itemName = itemName;
         this.serialNumber = serialNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.category = category;
         this.viewCount = 0;
         addImages(images);

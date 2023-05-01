@@ -98,6 +98,13 @@ public class BoardService {
         return new BoardDetailedDto().toDto(findItem);
     }
 
+    @Transactional(readOnly = true)
+    public boolean checkItem(Long id, String serialNumber) {
+        Board findBoard = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
+
+        return findBoard.getSerialNumber().equals(serialNumber);
+    }
+
     // 게시글 생성
     @Transactional
     public void makeBoard(BoardCreateDto createDto, Long categoryId) {
@@ -109,7 +116,8 @@ public class BoardService {
                 .collect(Collectors.toList());
 
         Board board = new Board(createDto.getTitle(), createDto.getContent(),
-                writer, createDto.getItemName(), getSerialNumber(createDto.getSerialNumber()), findItem, images);
+                writer, createDto.getItemName(), getSerialNumber(createDto.getSerialNumber()),
+                createDto.getLatitude(), createDto.getLongitude(), findItem, images);
 
         boardRepository.save(board);
 

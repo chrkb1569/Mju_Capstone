@@ -26,6 +26,20 @@ public class CategoryController {
         return Response.success(categoryService.findAll());
     }
 
+    @GetMapping("/categories/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "서브 카테고리 조회", notes = "특정 카테고리의 서브 카테고리 조회")
+    public Response getSubCategories(@PathVariable long categoryId) {
+        return Response.success(categoryService.findSubCategories(categoryId));
+    }
+
+    @GetMapping("/categories/{categoryId}/{subCategoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "리프 카테고리 조회", notes = "리프 카테고리들을 조회")
+    public Response getCategories(@PathVariable long categoryId, @PathVariable long subCategoryId) {
+        return Response.success(categoryService.findLeafCategories(categoryId, subCategoryId));
+    }
+
     // 카테고리 생성
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
