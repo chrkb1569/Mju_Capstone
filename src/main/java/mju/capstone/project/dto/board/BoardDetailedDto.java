@@ -25,8 +25,13 @@ public class BoardDetailedDto {
     private String serialNumber;
 
     private int viewCount;
+
+    private double latitude;
+
+    private double longitude;
     private List<ImageDto> images = new LinkedList<>();
     private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 
     public BoardDetailedDto toDto(Board board) {
         return BoardDetailedDto.builder()
@@ -37,8 +42,11 @@ public class BoardDetailedDto {
                 .itemName(board.getItemName())
                 .serialNumber(board.getSerialNumber())
                 .viewCount(board.getViewCount())
+                .latitude(board.getLatitude())
+                .longitude(board.getLongitude())
                 .images(board.getImages().stream().map(image -> new ImageDto().toDto(image)).collect(Collectors.toList()))
                 .createdDate(board.getCreatedDate())
+                .lastModifiedDate(board.getLastModifiedDate())
                 .build();
     }
 }
