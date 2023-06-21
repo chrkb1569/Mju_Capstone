@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 @Builder
 public class BoardDetailedDto {
     private Long id;
+
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
     private String title;
     private String content;
     private String writer;
@@ -30,8 +33,10 @@ public class BoardDetailedDto {
 
     private double longitude;
     private List<ImageDto> images = new LinkedList<>();
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
+
+    private String category;
+    private String subCategory;
+    private String leafCategory;
 
     public BoardDetailedDto toDto(Board board) {
         return BoardDetailedDto.builder()
@@ -47,6 +52,9 @@ public class BoardDetailedDto {
                 .images(board.getImages().stream().map(image -> new ImageDto().toDto(image)).collect(Collectors.toList()))
                 .createdDate(board.getCreatedDate())
                 .lastModifiedDate(board.getLastModifiedDate())
+                .category(board.getCategory().getCategoryName())
+                .subCategory(board.getSubCategory().getCategoryName())
+                .leafCategory(board.getLeafCategory().getCategoryName())
                 .build();
     }
 }

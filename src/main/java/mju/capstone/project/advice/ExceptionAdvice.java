@@ -5,7 +5,6 @@ import mju.capstone.project.exception.board.SerialNumberExistException;
 import mju.capstone.project.exception.board.WriterNotMatchException;
 import mju.capstone.project.exception.category.CategoryListEmptyException;
 import mju.capstone.project.exception.category.CategoryNotFoundException;
-import mju.capstone.project.exception.comment.CommentNotFoundException;
 import mju.capstone.project.exception.image.ImageUploadFailureException;
 import mju.capstone.project.exception.image.NotSupportedExtensionException;
 import mju.capstone.project.exception.refreshToken.RefreshTokenNotFoundException;
@@ -56,12 +55,6 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response imageUploadFailureException(ImageUploadFailureException e) {
         return Response.failure(400, e.getMessage());
-    }
-
-    @ExceptionHandler(CommentNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Response commentNotFoundException() {
-        return Response.failure(404, "입력하신 id에 해당하는 댓글을 찾지 못하였습니다.");
     }
 
     @ExceptionHandler(CategoryListEmptyException.class)

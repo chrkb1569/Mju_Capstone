@@ -1,6 +1,7 @@
 package mju.capstone.project.controller.category;
 
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import mju.capstone.project.dto.category.CategoryCreateDto;
@@ -29,6 +30,7 @@ public class CategoryController {
     @GetMapping("/categories/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "서브 카테고리 조회", notes = "특정 카테고리의 서브 카테고리 조회")
+    @ApiImplicitParam(name = "categoryId", value = "조회하기위한 특정 카테고리의 PK값", example = "1")
     public Response getSubCategories(@PathVariable long categoryId) {
         return Response.success(categoryService.findSubCategories(categoryId));
     }
@@ -36,7 +38,11 @@ public class CategoryController {
     @GetMapping("/categories/{categoryId}/{subCategoryId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "리프 카테고리 조회", notes = "리프 카테고리들을 조회")
-    public Response getCategories(@PathVariable long categoryId, @PathVariable long subCategoryId) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "categoryId", value = "조회할 최상위 카테고리의 PK값", example = "1"),
+            @ApiImplicitParam(name = "subCategoryId", value = "조회할 세부 카테고리의 PK값", example = "1")
+    })
+    public Response getLeafCategories(@PathVariable long categoryId, @PathVariable long subCategoryId) {
         return Response.success(categoryService.findLeafCategories(categoryId, subCategoryId));
     }
 
