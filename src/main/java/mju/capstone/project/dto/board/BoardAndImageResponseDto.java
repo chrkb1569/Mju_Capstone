@@ -22,6 +22,8 @@ public class BoardAndImageResponseDto {
     private String writer;
     private String itemName;
 
+    public int viewCount;
+
     private LocalDateTime createdDate;
 
     private LocalDateTime lastModifiedDate;
@@ -37,6 +39,7 @@ public class BoardAndImageResponseDto {
                 .title(board.getTitle())
                 .writer(board.getWriter())
                 .itemName(board.getItemName())
+                .viewCount(board.getViewCount())
                 .createdDate(board.getCreatedDate())
                 .lastModifiedDate(board.getLastModifiedDate())
                 .latitude(board.getLatitude())
