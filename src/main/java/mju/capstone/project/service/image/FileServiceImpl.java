@@ -2,6 +2,7 @@ package mju.capstone.project.service.image;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,12 @@ public class FileServiceImpl implements FileService {
         }
         return "";
     }
+
+    @Override
+    public S3Object getFile(String filename) {
+        return amazonS3Client.getObject(bucketName, filename);
+    }
+
 
     @Override
     public void deleteImage(String filename) {
