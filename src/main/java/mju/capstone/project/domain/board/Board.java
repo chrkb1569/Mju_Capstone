@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mju.capstone.project.domain.base.BaseEntity;
 import mju.capstone.project.domain.category.Category;
-import mju.capstone.project.domain.comment.Comment;
+import mju.capstone.project.domain.category.LeafCategory;
+import mju.capstone.project.domain.category.SubCategory;
 import mju.capstone.project.domain.image.Image;
 import mju.capstone.project.dto.board.BoardEditRequestDto;
 import mju.capstone.project.dto.board.BoardUpdateResultDto;
@@ -68,7 +69,8 @@ public class Board extends BaseEntity {
 
     @Builder
     public Board(String title, String content, String writer, String itemName,
-                 String serialNumber, Double latitude, Double longitude, Category category, List<Image> images) {
+                 String serialNumber, Double latitude, Double longitude,
+                 Category category, SubCategory subCategory, LeafCategory leafCategory, List<Image> images) {
         this.title = title;
         this.content = content;
         this.writer = writer;
@@ -77,6 +79,8 @@ public class Board extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.category = category;
+        this.subCategory = subCategory;
+        this.leafCategory = leafCategory;
         this.viewCount = 0;
         addImages(images);
     }
@@ -86,9 +90,15 @@ public class Board extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-    @Column(name = "comment_id", nullable = false)
-    private List<Comment> comments = new LinkedList<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "subCategory_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private SubCategory subCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "leafCategory_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private LeafCategory leafCategory;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     @Column(name = "image_id", nullable = false)
@@ -115,13 +125,13 @@ public class Board extends BaseEntity {
         this.content = requestDto.getContent();
 
         List<MultipartFile> addedImages = requestDto.getAddImage();
-        List<Integer> deletedImages = requestDto.getDeleteImage();
+        List<Long> deletedImages = requestDto.getDeleteImage();
 
         List<Image> fileImages = addedImages.stream()
                 .map(file -> fileToImage(file)).collect(Collectors.toList());
 
         List<Image> integerImages = deletedImages.stream()
-                .map(value -> integerToImage(value))
+                .map(value -> longToImage(value))
                 .filter(Optional::isPresent)
                 .map(value -> value.get())
                 .collect(Collectors.toList());
@@ -132,8 +142,8 @@ public class Board extends BaseEntity {
         return new BoardUpdateResultDto(addedImages, fileImages, integerImages);
     }
 
-    public Optional<Image> integerToImage(int intValue) {
-        return this.images.stream().filter(value -> value.getId() == intValue).findFirst();
+    public Optional<Image> longToImage(Long longValue) {
+        return this.images.stream().filter(value -> value.getId() == longValue).findFirst();
     }
 
     public Image fileToImage(MultipartFile file) {

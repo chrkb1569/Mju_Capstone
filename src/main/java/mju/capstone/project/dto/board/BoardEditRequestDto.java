@@ -29,5 +29,5 @@ public class BoardEditRequestDto {
     private List<MultipartFile> addImage = new ArrayList<>(); // 기존 이미지에 추가할 이미지
 
     @ApiModelProperty(value = "게시글을 수정할 경우, 삭제할 이미지")
-    private List<Integer> deleteImage = new ArrayList<>(); // 기존 이미지에서 삭제할 이미지의 번호
+    private List<Long> deleteImage = new ArrayList<>(); // 기존 이미지에서 삭제할 이미지의 번호
 }
