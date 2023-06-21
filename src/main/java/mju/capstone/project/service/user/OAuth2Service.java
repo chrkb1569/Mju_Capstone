@@ -1,4 +1,4 @@
-package mju.capstone.project.config.oauth2;
+package mju.capstone.project.service.user;
 
 import lombok.RequiredArgsConstructor;
 import mju.capstone.project.domain.user.OAuthAttributes;

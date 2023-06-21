@@ -5,7 +5,7 @@ import mju.capstone.project.config.jwt.JwtAccessDeniedHandler;
 import mju.capstone.project.config.jwt.JwtAuthenticationEntryPointHandler;
 import mju.capstone.project.config.jwt.JwtSecurityConfig;
 import mju.capstone.project.config.jwt.TokenProvider;
-import mju.capstone.project.config.oauth2.OAuth2Service;
+import mju.capstone.project.service.user.OAuth2Service;
 import mju.capstone.project.config.oauth2.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -76,9 +76,8 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/api/user/sign-up", "/api/user/sign-in", "/", "/oauth2/**", "/login/**"
-//                , "/oauth2/**").permitAll()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/api/user/sign-up", "/api/user/sign-in", "/",
+                        "/oauth2/**", "/login/**", "/oauth2/**").permitAll()
                 .antMatchers(SWAGGER_PERMIT_ARRAY).permitAll()
                 .anyRequest().authenticated()
                 .and()
