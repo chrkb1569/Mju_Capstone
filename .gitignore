@@ -9,6 +9,8 @@ src/main/resources/application.yml
 gradle/.DS_Store
 src/.DS_Store
 src/main/.DS_Store
+src/main/resources/static/.well-known/pki-validation/8898E38343C198BA4FA11901AB01AFD2.txt
+src/main/resources/keystore.p12
 
 ### STS ###
 .apt_generated
